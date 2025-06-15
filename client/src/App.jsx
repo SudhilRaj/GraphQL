@@ -64,6 +64,9 @@ function App() {
 
   // Mutation
   const [createUser] = useMutation(CREATE_USER);
+  // const [createUser] = useMutation(CREATE_USER, {
+  //   refetchQueries: [{ query: GET_USERS }] // Refetch books after mutation
+  // })
 
   // Create User
   const handleCreateUser = async () => {
@@ -74,6 +77,8 @@ function App() {
         isMarried: false, //Setting a default value
       },
     });
+
+    setNewUser({});
   };
 
   return (
