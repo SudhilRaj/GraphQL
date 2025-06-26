@@ -4,7 +4,7 @@ import "./App.css";
 
 const GET_USERS = gql`
   query GetUsers {
-    getUsers {
+    users {
       id
       age
       name
@@ -15,7 +15,7 @@ const GET_USERS = gql`
 
 const GET_USER_BY_ID = gql`
   query GetUserById($id: ID!) {
-    getUserById(id: $id) {
+    user(id: $id) {
       id
       age
       name
@@ -28,6 +28,17 @@ const CREATE_USER = gql`
   mutation CreateUser($name: String!, $age: Int!, $isMarried: Boolean!) {
     createUser(name: $name, age: $age, isMarried: $isMarried) {
       name
+    }
+  }
+`;
+
+const DELETE_USER = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id) {
+      id
+      age
+      name
+      isMarried
     }
   }
 `;
@@ -63,12 +74,13 @@ function App() {
   }
 
   // Mutation
+  // ============
+  // Create User
   const [createUser] = useMutation(CREATE_USER);
   // const [createUser] = useMutation(CREATE_USER, {
-  //   refetchQueries: [{ query: GET_USERS }] // Refetch books after mutation
+  //   refetchQueries: [{ query: GET_USERS }] // Refetch users after mutation
   // })
 
-  // Create User
   const handleCreateUser = async () => {
     createUser({
       variables: {
@@ -80,6 +92,18 @@ function App() {
 
     setNewUser({});
   };
+
+  // Delete User
+  const [deleteUser] = useMutation(DELETE_USER, {
+    refetchQueries: [{ query: GET_USERS }] // Refetch users after mutation
+  });
+  const handleDeleteUser = async (userId) => {
+    deleteUser({
+      variables: {
+        id: userId,
+      },
+    });
+  }
 
   return (
     <>
@@ -115,7 +139,7 @@ function App() {
           ) : (
             <>
               <option value="">Select a user</option>
-              {getUsersData?.getUsers.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}
+              {getUsersData?.users.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}
             </>
           )}
 
@@ -124,8 +148,8 @@ function App() {
           <p> Loading user...</p>
         ) : (
           <div className="user-card">
-            <p>{getUserByIdData?.getUserById?.name}</p>
-            <p>{getUserByIdData?.getUserById?.age}</p>
+            <p>{getUserByIdData?.user?.name}</p>
+            <p>{getUserByIdData?.user?.age}</p>
           </div>
         )}
       </div>
@@ -136,11 +160,14 @@ function App() {
         {getUsersLoading ? <p> Loading users...</p> :
           getUsersError ? <p>Error: {getUsersError.message}</p> : (
             <div>
-              {getUsersData?.getUsers.map((user) => (
-                <div key={user.id} className="user-card">
-                  <p> <b>Name:</b> {user.name}</p>
-                  <p> <b>Age:</b> {user.age}</p>
-                  <p> <b>Is this user married:</b> {user.isMarried ? "Yes" : "No"}</p>
+              {getUsersData?.users.map((user) => (
+                <div key={user.id} className="user-card-container">
+                  <div className="user-card">
+                    <p> <b>Name:</b> {user.name}</p>
+                    <p> <b>Age:</b> {user.age}</p>
+                    <p> <b>Is this user married:</b> {user.isMarried ? "Yes" : "No"}</p>
+                  </div>
+                  <div className="close-btn" onClick={() => handleDeleteUser(user.id)}>X</div>
                 </div>
               ))}
             </div>
