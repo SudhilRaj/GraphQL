@@ -7,8 +7,8 @@
 - Enables flexible and efficient data querying, especially for frontend applications.
 - Supports not only queries (read) but also mutations (write/modify) and subscriptions (real-time updates).
 - A graph is a representation of objects and their relations. 
-- REST is more of an architectural style; GraphQL is a query language to interact with the API which have its own rules
-- Under the hood GraphQL also using the standard HTTP
+- REST is more of an architectural style; GraphQL is a query language to interact with the API which have its own rules.
+- Under the hood GraphQL also using the standard HTTP.
 
 ### Key Benefits
 - Clients can fetch only the required fields, reducing over-fetching and under-fetching.
