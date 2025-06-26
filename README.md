@@ -143,3 +143,7 @@ This will run the React app on `http://localhost:5173`
 - **Database**: In-memory (No database used here)
   
   (NOTE - We can use a real DB, Express, Typescript, etc as updates to this app)
+
+  https://www.apollographql.com/docs/react
+  
+  https://www.apollographql.com/docs/apollo-server/getting-started
